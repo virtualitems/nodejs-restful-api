@@ -1,0 +1,28 @@
+{
+  "name": "nodejs-restful-api",
+  "version": "0.0.1",
+  "description": "A RESTful API using Node.js",
+  "author": "alejandrocr.co",
+  "license": "MIT",
+  "main": "source/main.mjs",
+  "type": "module",
+  "keywords": [
+    "nodejs",
+    "api",
+    "rest"
+  ],
+  "dependencies": {
+    "express": "^4.18.2",
+    "request": "^2.88.2",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.3"
+  },
+  "scripts": {
+    "start": "node source/main.mjs",
+    "dev": "nodemon source/main.mjs",
+    "test": "jest"
+  }
+}
