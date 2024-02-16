@@ -18,6 +18,7 @@ server.use('/media', express.static('media'));
 server.use('/tmp', express.static('tmp'));
 
 server.install(OwnersApp);
+server.setupDatabase(OwnersApp.statements());
 
 
 // setup directories

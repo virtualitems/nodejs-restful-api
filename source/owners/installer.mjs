@@ -24,6 +24,17 @@ class OwnersInstaller extends Installer {
     application.put(route(urls.pointer, namespace, version), controllers.update);
     application.delete(route(urls.pointer, namespace, version), controllers.destroy);
   }
+
+  statements() {
+    return [
+      `CREATE TABLE IF NOT EXISTS resources_owners (
+        id INTEGER PRIMARY KEY,
+        slug TEXT UNIQUE NOT NULL,
+        name TEXT
+      );`
+    ];
+  }
+
 }
 
 

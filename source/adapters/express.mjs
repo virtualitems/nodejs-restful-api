@@ -4,6 +4,7 @@
  */
 
 import expresslib from 'express';
+import { createDatabase } from './sqlite3.mjs'
 
 
 export const express = expresslib;
@@ -18,6 +19,18 @@ class Server {
     installer.install(this.application);
   }
 
+  setupDatabase(statements) {
+    const database = createDatabase();
+
+    database.serialize(() => {
+      statements.forEach((statement) => {
+        database.run(statement);
+      });
+    });
+
+    database.close();
+  }
+
   use(...args) {
     this.application.use(...args);
   }
@@ -29,9 +42,15 @@ class Server {
 
 
 export class Installer {
+
   install() {
     throw new Error('Not implemented');
   }
+
+  statements() {
+    throw new Error('Not implemented');
+  }
+
 }
 
 
