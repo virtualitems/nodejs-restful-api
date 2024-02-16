@@ -1,0 +1,9 @@
+# Personal
+.ignore/
+
+# Nodejs
+node_modules/
+
+# Sqlite
+*.sqlite
+*.sqlite3
