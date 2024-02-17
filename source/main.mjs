@@ -6,8 +6,10 @@ import fs from 'fs';
 
 import server, { express } from './adapters/express.mjs';
 import OwnersApp from './owners/installer.mjs';
+import { createDatabase } from './adapters/sqlite3.mjs';
 
 
+// constants
 const port = 3000;
 
 
@@ -18,7 +20,36 @@ server.use('/media', express.static('media'));
 server.use('/tmp', express.static('tmp'));
 
 server.install(OwnersApp);
-server.setupDatabase(OwnersApp.statements());
+
+
+// setup database
+const database = createDatabase();
+
+const statements = [
+  `CREATE TABLE IF NOT EXISTS owners (
+    id INTEGER PRIMARY KEY,
+    slug TEXT UNIQUE NOT NULL,
+    name TEXT
+  );`,
+
+  `CREATE TABLE IF NOT EXISTS resources (
+    id INTEGER PRIMARY KEY,
+    owner_id INTEGER,
+    slug TEXT UNIQUE NOT NULL,
+    name TEXT,
+    value REAL,
+    FOREIGN KEY (owner_id) REFERENCES owners(id)
+  );`,
+
+];
+
+database.serialize(() => {
+  statements.forEach((statement) => {
+    database.run(statement);
+  });
+});
+
+database.close();
 
 
 // setup directories
