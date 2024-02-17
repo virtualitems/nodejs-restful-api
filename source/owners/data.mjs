@@ -86,6 +86,28 @@ export function create(model) {
 
 
 /**
+ * Update an owner by slug.
+ * @param {Object} target
+ * @param {Object} model
+ * @param {string} model.slug
+ * @param {string} model.name
+ */
+export function update(target, model) {
+  const database = createDatabase();
+  const statement = 'UPDATE owners SET name = ? WHERE slug = ?;';
+  return new Promise((resolve, reject) => {
+    database.run(statement, [model.name, target.slug], (err) => {
+      database.close();
+      if (err) {
+        reject(err);
+      }
+      resolve();
+    });
+  });
+}
+
+
+/**
  * Delete an owner by slug.
  * @param {Object} model
  * @param {string} model.slug

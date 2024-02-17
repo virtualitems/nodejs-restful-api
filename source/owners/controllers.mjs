@@ -45,7 +45,25 @@ export async function store(request, response) {
 
 // PUT owners/{slug}
 export async function update(request, response) {
-  response.send('update');
+
+  try {
+    const model = request.params;
+
+    const item = await data.filter(model);
+
+    if (item === undefined) {
+      response.status(404).send();
+      return;
+    }
+
+    await data.update(model, request.body);
+    response.status(204).send();
+
+  } catch (error) {
+    const payload = createResponseObject('error', null, error.message);
+    response.status(500).send(payload);
+  }
+
 }
 
 
@@ -53,7 +71,16 @@ export async function update(request, response) {
 export async function destroy(request, response) {
 
   try {
-    await data.remove(request.params);
+    const model = request.params;
+
+    const item = await data.filter(model);
+
+    if (item === undefined) {
+      response.status(404).send();
+      return;
+    }
+
+    await data.remove(model);
     response.status(204).send();
 
   } catch (error) {
