@@ -22,3 +22,25 @@ export function all() {
     });
   });
 }
+
+
+/**
+ * Create a new owner.
+ * @param {Object} model
+ * @param {string} model.slug
+ * @param {string} model.name
+ * @return {Promise}
+ */
+export function create(model) {
+  const database = createDatabase();
+  const statement = 'INSERT INTO owners (slug, name) VALUES (?, ?);';
+  return new Promise((resolve, reject) => {
+    database.run(statement, [model.slug, model.name], (err) => {
+      database.close();
+      if (err) {
+        reject(err);
+      }
+      resolve();
+    });
+  });
+}

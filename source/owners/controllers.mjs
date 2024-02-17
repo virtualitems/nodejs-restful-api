@@ -21,7 +21,15 @@ export async function show(request, response) {
 
 // POST owners/{slug}
 export async function store(request, response) {
-  response.send('store');
+
+  try {
+    await data.create(request.body);
+    response.status(201).send();
+
+  } catch (error) {
+    response.status(500).send(error.message);
+  }
+
 }
 
 

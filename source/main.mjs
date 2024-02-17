@@ -15,6 +15,7 @@ const port = 3000;
 
 // setup express
 server.use(express.json());
+server.use(express.urlencoded({ extended: true }));
 server.use(express.static('public'));
 server.use('/media', express.static('media'));
 server.use('/tmp', express.static('tmp'));
