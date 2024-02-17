@@ -2,31 +2,36 @@
  * @fileoverview Controllers for the owners system (MVC architecture).
  */
 
+import * as data from './data.mjs';
+
+
 // GET owners/
-export function index(request, response) {
-  response.send('index');
+export async function index(request, response) {
+  const items = await data.all();
+  const payload = JSON.stringify(items);
+  response.send(payload);
 }
 
 
 // GET owners/{slug}
-export function show(request, response) {
+export async function show(request, response) {
   response.send('show');
 }
 
 
 // POST owners/{slug}
-export function store(request, response) {
+export async function store(request, response) {
   response.send('store');
 }
 
 
 // PUT owners/{slug}
-export function update(request, response) {
+export async function update(request, response) {
   response.send('update');
 }
 
 
 // DELETE owners/{slug}
-export function destroy(request, response) {
+export async function destroy(request, response) {
   response.send('destroy');
 }

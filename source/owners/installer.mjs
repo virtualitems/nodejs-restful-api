@@ -13,6 +13,7 @@ const namespace = 'owners';
 
 
 class OwnersInstaller extends Installer {
+
   /**
    * Attaches the owners system to the application.
    * @param {import('express').Express} application
