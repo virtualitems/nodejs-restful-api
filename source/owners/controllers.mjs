@@ -51,5 +51,14 @@ export async function update(request, response) {
 
 // DELETE owners/{slug}
 export async function destroy(request, response) {
-  response.send('destroy');
+
+  try {
+    await data.remove(request.params);
+    response.status(204).send();
+
+  } catch (error) {
+    const payload = createResponseObject('error', null, error.message);
+    response.status(500).send(payload);
+  }
+
 }

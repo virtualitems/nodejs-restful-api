@@ -26,7 +26,9 @@ export function all() {
 
 /**
  * Find an owner by slug.
- * @param {string} slug
+ * @param {Object} model
+ * @param {string} model.slug
+ * @param {string} model.name
  * @return {Promise<Object>}
  */
 export function filter(model) {
@@ -73,6 +75,28 @@ export function create(model) {
   const statement = 'INSERT INTO owners (slug, name) VALUES (?, ?);';
   return new Promise((resolve, reject) => {
     database.run(statement, [model.slug, model.name], (err) => {
+      database.close();
+      if (err) {
+        reject(err);
+      }
+      resolve();
+    });
+  });
+}
+
+
+/**
+ * Delete an owner by slug.
+ * @param {Object} model
+ * @param {string} model.slug
+ * @return {Promise}
+ */
+export function remove(model) {
+  const database = createDatabase();
+  const statement = 'DELETE FROM owners WHERE slug = ?;';
+
+  return new Promise((resolve, reject) => {
+    database.run(statement, [model.slug], (err) => {
       database.close();
       if (err) {
         reject(err);
