@@ -3,19 +3,28 @@
  */
 
 import * as data from './data.mjs';
+import { createResponseObject } from '../shared/http.mjs';
 
 
 // GET owners/
 export async function index(request, response) {
   const items = await data.all();
-  const payload = JSON.stringify(items);
+  const payload = createResponseObject('success', items);
   response.send(payload);
 }
 
 
 // GET owners/{slug}
 export async function show(request, response) {
-  response.send('show');
+  const item = await data.filter(request.params);
+
+  if (item === undefined) {
+    response.status(404).send();
+    return;
+  }
+
+  const payload = createResponseObject('success', item);
+  response.send(payload);
 }
 
 
@@ -27,7 +36,8 @@ export async function store(request, response) {
     response.status(201).send();
 
   } catch (error) {
-    response.status(500).send(error.message);
+    const payload = createResponseObject('error', null, error.message);
+    response.status(500).send(payload);
   }
 
 }
