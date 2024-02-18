@@ -8,7 +8,16 @@ import { createResponseObject } from '../shared/http.mjs';
 
 // GET owners/
 export async function index(request, response) {
-  const items = await data.all();
+
+  const { or_by, or_dr, pg_nu, pg_sz, q } = request.query;
+
+  const items = await data.all({
+    orderField: or_by,
+    orderDirection: or_dr,
+    pageNumber: pg_nu,
+    pageSize: pg_sz,
+    query: q,
+  });
   const payload = createResponseObject('success', items);
   response.send(payload);
 }

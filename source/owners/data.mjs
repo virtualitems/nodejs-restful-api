@@ -3,17 +3,62 @@
  */
 
 import { createDatabase } from '../adapters/sqlite3.mjs';
+import { isString } from '../shared/bool.mjs';
 
 
 /**
  * Find all owners.
  * @return {Promise<Object[]>}
  */
-export function all() {
+export function all(extras = {}) {
+
+  const {
+    orderField,
+    orderDirection,
+    pageNumber,
+    pageSize,
+    query
+  } = extras;
+
+  const pageSizeConverted = Number(pageSize);
+  const pageNumberConverted = Number(pageNumber);
+  const validFields = ['slug', 'name'];
+  const validDirections = ['asc', 'desc'];
+  const dataBinds = [];
   const database = createDatabase();
-  const statement = 'SELECT * FROM owners;';
+
+  let statement = 'SELECT * FROM owners';
+
+  if (isString(query)) {
+    statement += ' WHERE name LIKE ? OR slug LIKE ?';
+    dataBinds.push(`%${query}%`, `%${query}%`);
+  }
+
+  if (isString(orderField) && validFields.includes(orderField)) {
+    statement += ` ORDER BY ${orderField}`;
+
+    if (isString(orderDirection) && validDirections.includes(orderDirection)) {
+      statement += ` ${orderDirection}`;
+
+    }
+  }
+
+  if (pageSizeConverted && pageSizeConverted >= 0) {
+
+    if (Number(pageNumberConverted) && pageNumberConverted >= 0) {
+      statement += ` LIMIT ${pageSize} OFFSET ${(pageNumber - 1) * pageSize}`;
+
+    } else {
+      statement += ` LIMIT ${pageSize}`;
+
+    }
+
+  }
+
+  statement += ';';
+
   return new Promise((resolve, reject) => {
-    database.all(statement, (err, rows) => {
+    database.all(statement, dataBinds, (err, rows) => {
       database.close();
       if (err) {
         reject(err);
