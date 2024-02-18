@@ -111,6 +111,10 @@ describe('POST /v1/owners/', () => {
           slug: 'test-8',
           name: 'Test 8',
         }),
+        createRequest(url, {
+          slug: 'test-9',
+          name: 'Test 9',
+        }),
       ])
     );
 
