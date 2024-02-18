@@ -43,9 +43,9 @@ export function all(extras = {}) {
     }
   }
 
-  if (pageSizeConverted && pageSizeConverted >= 0) {
+  if (pageSizeConverted && pageSizeConverted > 0) {
 
-    if (Number(pageNumberConverted) && pageNumberConverted >= 0) {
+    if (Number(pageNumberConverted) && pageNumberConverted > 0) {
       statement += ` LIMIT ${pageSize} OFFSET ${(pageNumber - 1) * pageSize}`;
 
     } else {
